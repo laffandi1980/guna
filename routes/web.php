@@ -5,6 +5,8 @@ use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\DashboardController;
+use GuzzleHttp\Middleware;
+
 //use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
@@ -34,6 +36,8 @@ Route::post('login-proses', [LoginController::class,'login_proses'])->name('logi
 Route::get('daftar/{operation?}/{id?}', [UsersController::class, 'registrasi'])->name('daftar');
 Route::post('daftar/{operation?}/{id?}', [UsersController::class, 'registrasi'])->name('daftar');
 Route::get('mendaftar/{operation?}/{id?}', [UsersController::class, 'mendaftar'])->name('mendaftar');
-
-Route::get('dashboard/{operation?}/{id?}', [DashboardController::class, 'dashboard'])->name('dashboard');
-Route::post('dashboard/{operation?}/{id?}', [DashboardController::class, 'dashboard'])->name('dashboard');
+Route::group(['profix' => 'admin','middleware' => ['auth'], 'as' => 'admin' ],function(){
+    
+});
+Route::get('dashboard/{operation?}/{id?}', [DashboardController::class, 'dashboard'])->name('dashboard')->Middleware('auth');
+Route::post('dashboard/{operation?}/{id?}', [DashboardController::class, 'dashboard'])->name('dashboard');    
