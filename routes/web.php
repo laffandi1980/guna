@@ -5,6 +5,7 @@ use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CrudController;
 use GuzzleHttp\Middleware;
 
 //use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
@@ -40,4 +41,7 @@ Route::group(['profix' => 'admin','middleware' => ['auth'], 'as' => 'admin' ],fu
     
 });
 Route::get('dashboard/{operation?}/{id?}', [DashboardController::class, 'dashboard'])->name('dashboard')->Middleware('auth');
-Route::post('dashboard/{operation?}/{id?}', [DashboardController::class, 'dashboard'])->name('dashboard');    
+Route::post('dashboard/{operation?}/{id?}', [DashboardController::class, 'dashboard'])->name('dashboard')->Middleware('auth');    
+
+Route::get('manajemencrud/{operation?}/{id?}', [CrudController::class, 'manajemencrud'])->name('crud')->Middleware('auth');
+Route::post('manajemencrud/{operation?}/{id?}', [CrudController::class, 'manajemencrud'])->name('crud')->Middleware('auth');
