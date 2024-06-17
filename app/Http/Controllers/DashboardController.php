@@ -5,13 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
     //
     public function dashboard(){
-        return view('dashboard.dashboard');
+        // untuk menu
+        $postMenu = DB::select('SELECT * FROM menus');
+        return view('dashboard.dashboard',['judul'=>'Dashboard','menu'=>$postMenu]);
     }
     
 }

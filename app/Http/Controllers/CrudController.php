@@ -246,6 +246,8 @@ class CrudController extends Controller
         $css_files = $output->css_files;
         $js_files = $output->js_files;
         $output = $output->output;
+        // untuk menu
+        $postMenu = DB::select('SELECT * FROM menus');
         
         return view('default_template1', [
             'output' => $output,
@@ -255,6 +257,7 @@ class CrudController extends Controller
                 window.location.replace('". route('crud') ."');
             });</script>",
             'judul' => "Manajemen Menu",
+            'menu' => $postMenu,
         ]);
         
     }
