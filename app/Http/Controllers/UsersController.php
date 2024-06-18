@@ -8,6 +8,7 @@ use Illuminate\Database\Events\StatementPrepared;
 use Illuminate\Support\Facades\Hash;
 use PharIo\Manifest\Url;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
 {
@@ -55,40 +56,55 @@ class UsersController extends Controller
         $crud = new GroceryCrud($config, $database);
 
         $crud->setTable('users');
-        $crud->setSubject('Users', 'Users');
+        $crud->setSubject('Pengguna', 'Pengguna');
         $crud->columns(['name','email','password']);
         
         $crud->addFields(['name','email','password']);
-        $crud->callbackColumn('password', function ($value, $row) {
-            if (!empty($value)) {
-                return "<a class='btn btn-info' href='/users/" . $row->id."' target='blank'>$value</a>";
-            } else {
-                // Make sure that you return white space or else the cell may break on print layout
-                return '&nbsp;';
-            }
-        });
+        $crud->editFields(['id','name','email','password']);
+        // $crud->callbackColumn('password', function ($value, $row) {
+        //     if (!empty($value)) {
+        //         return "<a class='btn btn-info' href='/users/" . $row->id."' target='blank'>$value</a>";
+        //     } else {
+        //         // Make sure that you return white space or else the cell may break on print layout
+        //         return '&nbsp;';
+        //     }
+        // });
         // $crud->displayAs('password','jumlah');
-        // $crud->callbackColumn('password',array($this,'_opo'));
+        $crud->callbackColumn('password',function(){
+            return "*********";
+        });
     
-        $crud->setActionButton('Pesan', 'fa fa-user-plus', function ($row) {
-            return 'javascript:alert("opoo")';},false);   
+        // $crud->setActionButton('Pesan', 'fa fa-user-plus', function ($row) {
+        //     return 'javascript:alert("opoo")';},false);   
 
         $crud->callbackBeforeInsert(function ($stateParameters) {
             $stateParameters->data['password'] = Hash::make($stateParameters->data['password']);
+            $stateParameters->data['slug'] = md5($stateParameters->data['name'].date("Y-m-d h:s"));
             return $stateParameters;
         });
 
         $crud->callbackBeforeUpdate(function ($stateParameters) {
-            $stateParameters->data['password'] = Hash::make($stateParameters->data['password']);
+            if($stateParameters->data['password']!=""){
+                $stateParameters->data['password'] = Hash::make($stateParameters->data['password']);
+            }else{
+                $post12 = DB::select('SELECT * FROM users where id=?',array($stateParameters->data["id"]));
+                foreach($post12 as $row){
+                    $stateParameters->data['password'] =$row->password;
+                }
+            }
+            $stateParameters->data['slug'] = md5($stateParameters->data['name'].date("Y-m-d h:s"));
             return $stateParameters;
         });
-
-        // $crud->callbackEditField('password', function ($fieldValue, $primaryKeyValue, $rowData) {
-        //     return '<input type="password" class="form-control" name="password" value="" placeholder="Masukkan Password Baru"  />';
-        // });
-        $crud->setConfig('open_in_modal', false);
-        $crud->setConfig('paging_options', [5,10,15,20,25,30,35,40,45,50,100]);
-        $crud->setConfig('default_per_page', 5);
+        $crud->setPrimaryKey("slug","users");
+        $crud->callbackEditField('password', function ($fieldValue, $primaryKeyValue, $rowData) {
+            return '<input type="password" class="form-control" name="password" value="" placeholder="Masukkan Password Baru"  />';
+        });
+        $crud->callbackEditField('id', function ($fieldValue, $primaryKeyValue, $rowData) {
+            return '<input type="text" class="form-control" name="id" value="'.$rowData["id"].'" disabled />';
+        });
+        // $crud->setConfig('open_in_modal', false);
+        $crud->setConfig('paging_options', [10,50,100,200]);
+        $crud->setConfig('default_per_page', 10);
         // $crud->setConfig('xss_clean', true);
         $crud->displayAs('name','Nama');
         $crud->fieldType('password', 'password');
@@ -110,10 +126,19 @@ class UsersController extends Controller
         $js_files = $output->js_files;
         $output = $output->output;
 
-        return view('default_template', [
+        // untuk menu
+        $postMenu = DB::select('SELECT * FROM menus');
+        //  untuk aplikasi
+        $postAplikasi = DB::select('SELECT * FROM aplikasi');
+
+        return view('default_template1', [
             'output' => $output,
             'css_files' => $css_files,
-            'js_files' => $js_files
+            'js_files' => $js_files,
+            'tambahan' => "",
+            'judul' => "Manajemen Siswa",
+            'menu' => $postMenu,
+            'aplikasi' => $postAplikasi,
         ]);
         
     }
@@ -133,11 +158,13 @@ class UsersController extends Controller
         
         $crud->callbackBeforeInsert(function ($stateParameters) {
             $stateParameters->data['password'] = Hash::make($stateParameters->data['password']);
+            $stateParameters->data['slug'] = md5($stateParameters->data['name']);
             return $stateParameters;
         });
 
         $crud->callbackBeforeUpdate(function ($stateParameters) {
             $stateParameters->data['password'] = Hash::make($stateParameters->data['password']);
+            $stateParameters->data['slug'] = md5($stateParameters->data['name']);
             return $stateParameters;
         });
 

@@ -33,8 +33,8 @@ Route::get('/', function () {
 Route::get('customers/{operation?}/{id?}', [CustomersController::class, 'datagrid']);
 Route::post('customers/{operation?}/{id?}', [CustomersController::class, 'datagrid']);
 
-Route::get('users/{operation?}/{id?}', [UsersController::class, 'datagrid']);
-Route::post('users/{operation?}/{id?}', [UsersController::class, 'datagrid']);
+Route::get('users/{operation?}/{id?}', [UsersController::class, 'datagrid'])->Middleware('auth');
+Route::post('users/{operation?}/{id?}', [UsersController::class, 'datagrid'])->Middleware('auth');
 
 Route::get('login', [LoginController::class,'index'])->name('login');
 Route::post('login-proses', [LoginController::class,'login_proses'])->name('login-proses');
