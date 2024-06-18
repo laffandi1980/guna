@@ -110,7 +110,14 @@ class UsersController extends Controller
         $crud->fieldType('password', 'password');
         $crud->fieldType('email', 'email');
         $crud->requiredAddFields(['name','email','password']);
-
+        $postHapus = DB::select('SELECT * FROM users');
+        $jum=0;
+        foreach($postHapus as $r){
+            $jum++;
+        }
+        if($jum==1){
+            $crud->unsetDelete();
+        }
         $crud->setCsrfTokenName('_token');
         $crud->setCsrfTokenValue(csrf_token());
 
@@ -136,7 +143,7 @@ class UsersController extends Controller
             'css_files' => $css_files,
             'js_files' => $js_files,
             'tambahan' => "",
-            'judul' => "Manajemen Siswa",
+            'judul' => "Manajemen Pengguna",
             'menu' => $postMenu,
             'aplikasi' => $postAplikasi,
         ]);

@@ -99,7 +99,7 @@ class AbsensiGuruController extends Controller
         // $crud->fieldType('password', 'password');
         // $crud->fieldType('email', 'email');
 
-        $crud->unsetSearchColumns(['siswa','guru','mapel']);
+        $crud->unsetSearchColumns(['guru']);
         // $crud->setPrimaryKey('slug','aplikasi');
         // $crud->unsetFilters();
         // $crud->unsetColumnsButton();

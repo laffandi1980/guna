@@ -35,15 +35,15 @@ Route::get('/', function () {
 Route::get('customers/{operation?}/{id?}', [CustomersController::class, 'datagrid']);
 Route::post('customers/{operation?}/{id?}', [CustomersController::class, 'datagrid']);
 
-Route::get('users/{operation?}/{id?}', [UsersController::class, 'datagrid'])->Middleware('auth');
-Route::post('users/{operation?}/{id?}', [UsersController::class, 'datagrid'])->Middleware('auth');
+Route::get('users/{operation?}/{id?}', [UsersController::class, 'datagrid'])->name('users')->Middleware('auth');
+Route::post('users/{operation?}/{id?}', [UsersController::class, 'datagrid'])->name('users')->Middleware('auth');
 
 Route::get('login', [LoginController::class,'index'])->name('login');
 Route::post('login-proses', [LoginController::class,'login_proses'])->name('login-proses');
 Route::get('logout', [LoginController::class,'logout'])->name('logout');
 
-// Route::get('daftar/{operation?}/{id?}', [UsersController::class, 'registrasi'])->name('daftar');
-// Route::post('daftar/{operation?}/{id?}', [UsersController::class, 'registrasi'])->name('daftar');
+Route::get('daftar/{operation?}/{id?}', [UsersController::class, 'registrasi'])->name('daftar');
+Route::post('daftar/{operation?}/{id?}', [UsersController::class, 'registrasi'])->name('daftar');
 // Route::get('mendaftar/{operation?}/{id?}', [UsersController::class, 'mendaftar'])->name('mendaftar');
 Route::group(['profix' => 'admin','middleware' => ['auth'], 'as' => 'admin' ],function(){
     
