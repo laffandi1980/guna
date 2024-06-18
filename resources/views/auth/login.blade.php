@@ -19,7 +19,7 @@
   <!-- /.login-logo -->
   <div class="card card-outline card-primary">
     <div class="card-header text-center">
-      <a href="{{ route('login') }}" class="h1"><b>Login</b>LTE</a>
+      <a href="{{ route('login') }}" class="h1"><b>Login</b></a>
     </div>
     <div class="card-body">
       <p class="login-box-msg">Sign in untuk memulai</p>
@@ -76,12 +76,12 @@
       </div>
       <!-- /.social-auth-links -->
 
-      <p class="mb-1">
+      <!-- <p class="mb-1">
         <a href="forgot-password.html">Lupa Password</a>
       </p>
       <p class="mb-0">
         <a href="daftar/add" class="text-center">Register Pengguna Baru</a>
-      </p>
+      </p> -->
     </div>
     <!-- /.card-body -->
   </div>

@@ -35,4 +35,9 @@ class LoginController extends Controller
             return redirect()->route('login')->with('failed','Periksa email atau password Anda!');
         }
     }
+
+    public function logout(){
+        Session::flush();
+        return redirect('login')->with('alert','Anda telah logout');
+    }    
 }

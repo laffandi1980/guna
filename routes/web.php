@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AbsensiSiswaController;
+use App\Http\Controllers\AbsensiGuruController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\LoginController;
@@ -38,10 +40,11 @@ Route::post('users/{operation?}/{id?}', [UsersController::class, 'datagrid'])->M
 
 Route::get('login', [LoginController::class,'index'])->name('login');
 Route::post('login-proses', [LoginController::class,'login_proses'])->name('login-proses');
+Route::get('logout', [LoginController::class,'logout'])->name('logout');
 
-Route::get('daftar/{operation?}/{id?}', [UsersController::class, 'registrasi'])->name('daftar');
-Route::post('daftar/{operation?}/{id?}', [UsersController::class, 'registrasi'])->name('daftar');
-Route::get('mendaftar/{operation?}/{id?}', [UsersController::class, 'mendaftar'])->name('mendaftar');
+// Route::get('daftar/{operation?}/{id?}', [UsersController::class, 'registrasi'])->name('daftar');
+// Route::post('daftar/{operation?}/{id?}', [UsersController::class, 'registrasi'])->name('daftar');
+// Route::get('mendaftar/{operation?}/{id?}', [UsersController::class, 'mendaftar'])->name('mendaftar');
 Route::group(['profix' => 'admin','middleware' => ['auth'], 'as' => 'admin' ],function(){
     
 });
@@ -66,5 +69,11 @@ Route::post('jurusan/{operation?}/{id?}', [JurusanController::class, 'kelolaJuru
 Route::get('guru/{operation?}/{id?}', [GuruController::class, 'kelolaGuru'])->name('crudguru')->Middleware('auth');
 Route::post('guru/{operation?}/{id?}', [GuruController::class, 'kelolaGuru'])->name('crudguru')->Middleware('auth');
 
-Route::get('matapelajaran/{operation?}/{id?}', [MatapelajaranController::class, 'kelolaMatapelajaran'])->name('crudguru')->Middleware('auth');
-Route::post('matapelajaran/{operation?}/{id?}', [MatapelajaranController::class, 'kelolaMatapelajaran'])->name('crudguru')->Middleware('auth');
+Route::get('matapelajaran/{operation?}/{id?}', [MatapelajaranController::class, 'kelolaMatapelajaran'])->name('crudmatapelajaran')->Middleware('auth');
+Route::post('matapelajaran/{operation?}/{id?}', [MatapelajaranController::class, 'kelolaMatapelajaran'])->name('crudmatapelajaran')->Middleware('auth');
+
+Route::get('absensiSiswa/{operation?}/{id?}', [AbsensiSiswaController::class, 'kelolaAbsensiSiswa'])->name('crudabsensisiswa')->Middleware('auth');
+Route::post('absensiSiswa/{operation?}/{id?}', [AbsensiSiswaController::class, 'kelolaAbsensiSiswa'])->name('crudabsensisiswa')->Middleware('auth');
+
+Route::get('absensiGuru/{operation?}/{id?}', [AbsensiGuruController::class, 'kelolaAbsensiGuru'])->name('crudabsensiguru')->Middleware('auth');
+Route::post('absensiGuru/{operation?}/{id?}', [AbsensiGuruController::class, 'kelolaAbsensiGuru'])->name('crudabsensiguru')->Middleware('auth');
