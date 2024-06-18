@@ -116,7 +116,7 @@ class CrudController extends Controller
         
     }
 
-    public function manajemencrud(Request $request)
+    public function manajemenmenu(Request $request)
     {
         $database = $this->_getDatabaseConnection();
         $config = config('grocerycrud');
@@ -144,7 +144,7 @@ class CrudController extends Controller
             }
             return $data;
         });
-        // woke
+        
         $crud->callbackColumn('menu', function ($value, $row) {
             $data=NULL;
             if($row->status=="sub menu"){
@@ -155,40 +155,6 @@ class CrudController extends Controller
             return $data;
         });
         
-        // $crud->callbackBeforeUpdate(function ($stateParameters) {
-        //     $stateParameters->data['password'] = Hash::make($stateParameters->data['password']);
-        //     return $stateParameters;
-        // });
-
-        // $crud->where([
-        //     'id' => -1,
-        // ]);
-        // $crud->where([
-        //     '1=? limit 3' => 1
-        // ]);
-        
-        // $crud->callbackAfterInsert(function ($stateParameters) {
-            // $redirectResponse = new \GroceryCrud\Core\Redirect\RedirectResponse();
-            // return $redirectResponse->setUrl(route('login'));
-            // $stateParameters->data['slug'] = Hash::make($stateParameters->data['id']);
-            // $stateParameters->data['slug']= "luqman";
-            // return $stateParameters;
-            // $callbackAfterInsertModel->updateCustomerName($stateParameters->insertId);
-        //     $stateParameters = (object)[
-        //         // 'id' => '20', //primary key value after insert
-        //         'data' => [ // data to insert
-        //             'slug' => 'John',
-                    
-        //         ]
-        //     ];
-        //     return $stateParameters;
-        // });
-        // });
-        // echo $request->segment(2);
-        // if($request->segment(2)==""){
-        //     return Redirect::to(route('login'));
-        // }
-
         $crud->callbackAddField('anggota',function ($stateParameters){
     
             $posts = DB::select('SELECT * FROM menus where status="menu"');
@@ -209,26 +175,13 @@ class CrudController extends Controller
         $crud->setConfig('actions_column_side', 'left');
         
         
-        // $crud->requiredAddFields(['menu','status','link']);
-        // $crud->displayAs('name','Nama');
-        // $crud->fieldType('password', 'password');
-        // $crud->fieldType('email', 'email');
-
-        //$crud->unsetColumns(['id','name','email','password','remember_token','email_verified_at','created_at','updated_at']);
+        $crud->requiredAddFields(['menu','status']);
         $crud->setPrimaryKey('slug','menus');
         $crud->unsetFilters();
         $crud->unsetColumnsButton();
         $crud->unsetPrint();
         $crud->unsetExport();
         $crud->unsetSettings();
-        // $crud->unsetOperations();
-        
-        // $crud->unsetTools();
-        // $crud->unsetCssIcons();
-        // $crud->unsetSettings();
-        //$crud->unsetSearchColumns(['remember_token','email_verified_at','created_at','updated_at']);
-        
-        // $crud->defaultOrdering('id_menu', 'desc');
 
         $crud->setCsrfTokenName('_token');
         $crud->setCsrfTokenValue(csrf_token());
@@ -239,7 +192,6 @@ class CrudController extends Controller
 
             header('Content-Type: application/json; charset=utf-8');
             echo $output->output;
-            // echo "ini lho ".$output->output;
             exit;
         }
 
@@ -248,16 +200,94 @@ class CrudController extends Controller
         $output = $output->output;
         // untuk menu
         $postMenu = DB::select('SELECT * FROM menus');
+        // untuk menu
+        $postAplikasi = DB::select('SELECT * FROM aplikasi');
         
         return view('default_template1', [
             'output' => $output,
             'css_files' => $css_files,
             'js_files' => $js_files,
             'tambahan' => "<script>window.addEventListener('gcrud.form.modal-close', () => {
-                window.location.replace('". route('crud') ."');
+                window.location.replace('". route('crudmenu') ."');
             });</script>",
             'judul' => "Manajemen Menu",
             'menu' => $postMenu,
+            'aplikasi' => $postAplikasi,
+        ]);
+        
+    }
+
+    public function manajemenaplikasi(Request $request)
+    {
+        $database = $this->_getDatabaseConnection();
+        $config = config('grocerycrud');
+
+        $crud = new GroceryCrud($config, $database);
+        // $crud->setTheme('bootstrap-v4');
+        $crud->setTable('aplikasi');
+        $crud->setSubject('Aplikasi', 'Aplikasi');
+        $crud->columns(['nama','copyright','logo']);
+        
+        $crud->addFields(['nama','copyright','logo']);
+        $crud->editFields(['nama','copyright','logo']);
+        
+        $crud->callbackBeforeInsert(function ($stateParameters) {
+            $stateParameters->data['slug'] = md5($stateParameters->data['nama'].date("Y-m-d h:s"));
+            return $stateParameters;
+        });
+        $crud->setConfig('actions_column_side', 'right');
+        $crud->setConfig('paging_options', [1]);
+        $crud->setConfig('default_per_page', 1);
+        $crud->setConfig('publish_events', true);
+        $crud->setConfig('actions_column_side', 'left');
+        
+        
+        $crud->requiredAddFields(['nama','copyright','logo']);
+        // $crud->displayAs('name','Nama');
+        // $crud->fieldType('password', 'password');
+        // $crud->fieldType('email', 'email');
+
+        //$crud->unsetColumns(['id','name','email','password','remember_token','email_verified_at','created_at','updated_at']);
+        $crud->setPrimaryKey('slug','aplikasi');
+        $crud->unsetFilters();
+        $crud->unsetColumnsButton();
+        $crud->unsetPrint();
+        $crud->unsetExport();
+        $crud->unsetSettings();
+        $crud->unsetDelete();
+        $crud->unsetAdd();
+        $crud->unsetSearchColumns(['nama','copyright','logo']);
+        $crud->setFieldUpload('logo', 'uploads', url('uploads')."/");
+        $crud->setCsrfTokenName('_token');
+        $crud->setCsrfTokenValue(csrf_token());
+
+        $output = $crud->render();
+
+        if ($output->isJSONResponse) {
+
+            header('Content-Type: application/json; charset=utf-8');
+            echo $output->output;
+            exit;
+        }
+
+        $css_files = $output->css_files;
+        $js_files = $output->js_files;
+        $output = $output->output;
+        // untuk menu
+        $postMenu = DB::select('SELECT * FROM menus');
+        //  untuk aplikasi
+        $postAplikasi = DB::select('SELECT * FROM aplikasi');
+
+        return view('default_template1', [
+            'output' => $output,
+            'css_files' => $css_files,
+            'js_files' => $js_files,
+            'tambahan' => "<script>window.addEventListener('gcrud.form.modal-close', () => {
+                window.location.replace('". route('crudaplikasi') ."');
+            });</script>",
+            'judul' => "Manajemen Aplikasi",
+            'menu' => $postMenu,
+            'aplikasi' => $postAplikasi,
         ]);
         
     }

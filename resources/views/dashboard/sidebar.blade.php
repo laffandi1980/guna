@@ -2,11 +2,17 @@
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
 <!-- Sidebar - Brand -->
-<a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-    <div class="sidebar-brand-icon rotate-n-15">
-        <i class="fas fa-laugh-wink"></i>
+<a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{url('dashboard')}}">
+    <div class="sidebar-brand-icon">
+        <!-- <i class="fas fa-laugh-wink"></i> -->
+         @foreach($aplikasi as $row)
+        <img src="{{url('uploads').'/'.$row->logo}}" style="width:50px;height:50px;border-radius: 25px;">
+        @endforeach
+        
     </div>
-    <div class="sidebar-brand-text mx-3">Absensi <sup></sup></div>
+    @foreach($aplikasi as $row)
+    <div class="sidebar-brand-text mx-3"> {{$row->nama}}<sup></sup></div>
+    @endforeach
 </a>
 
 <!-- Divider -->
@@ -14,7 +20,7 @@
 
 <!-- Nav Item - Dashboard -->
 <li class="nav-item active">
-    <a class="nav-link" href="dashboard">
+<a class="nav-link" href="{{url('dashboard')}}">
         <i class="fas fa-fw fa-tachometer-alt"></i>
         <span>{{$judul}}</span></a>
 </li>
@@ -52,7 +58,7 @@
                     <h6 class="collapse-header">Sub {{$post->menu}}:</h6>
                     @foreach($menu as $post1)
                         @if($post1->anggota==$post->id)
-                            <a class="collapse-item" href="{{$post1->link}}">{{$post1->menu}}</a>
+                            <a class="collapse-item" href="{{url($post1->link)}}">{{$post1->menu}}</a>
                         @endif
                     @endforeach
                     
@@ -63,8 +69,8 @@
         @else
         <!-- Nav Item - Charts -->
         <li class="nav-item">
-            <a class="nav-link" href="{{$post->link}}">
-                <i class="fas fa-fw fa-chart-area"></i>
+            <a class="nav-link" href="{{url($post->link)}}">
+                <i class="fas fa-fw fa-asterisk"></i>
                 <span>{{$post->menu}}</span></a>
         </li>
         @endif    

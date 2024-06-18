@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CrudController;
+use App\Http\Controllers\SiswaController;
 use GuzzleHttp\Middleware;
 
 //use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
@@ -43,5 +44,11 @@ Route::group(['profix' => 'admin','middleware' => ['auth'], 'as' => 'admin' ],fu
 Route::get('dashboard/{operation?}/{id?}', [DashboardController::class, 'dashboard'])->name('dashboard')->Middleware('auth');
 Route::post('dashboard/{operation?}/{id?}', [DashboardController::class, 'dashboard'])->name('dashboard')->Middleware('auth');    
 
-Route::get('manajemencrud/{operation?}/{id?}', [CrudController::class, 'manajemencrud'])->name('crud')->Middleware('auth');
-Route::post('manajemencrud/{operation?}/{id?}', [CrudController::class, 'manajemencrud'])->name('crud')->Middleware('auth');
+Route::get('manajemenmenu/{operation?}/{id?}', [CrudController::class, 'manajemenmenu'])->name('crudmenu')->Middleware('auth');
+Route::post('manajemenmenu/{operation?}/{id?}', [CrudController::class, 'manajemenmenu'])->name('crudmenu')->Middleware('auth');
+
+Route::get('manajemenaplikasi/{operation?}/{id?}', [CrudController::class, 'manajemenaplikasi'])->name('crudaplikasi')->Middleware('auth');
+Route::post('manajemenaplikasi/{operation?}/{id?}', [CrudController::class, 'manajemenaplikasi'])->name('crudaplikasi')->Middleware('auth');
+
+Route::get('siswa/{operation?}/{id?}', [SiswaController::class, 'kelolaSiswa'])->name('crudsiswa')->Middleware('auth');
+Route::post('siswa/{operation?}/{id?}', [SiswaController::class, 'kelolaSiswa'])->name('crudsiswa')->Middleware('auth');

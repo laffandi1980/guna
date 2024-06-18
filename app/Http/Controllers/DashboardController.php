@@ -14,7 +14,8 @@ class DashboardController extends BaseController
     public function dashboard(){
         // untuk menu
         $postMenu = DB::select('SELECT * FROM menus');
-        return view('dashboard.dashboard',['judul'=>'Dashboard','menu'=>$postMenu]);
+        $postAplikasi = DB::select('SELECT * FROM aplikasi');
+        return view('dashboard.dashboard',['judul'=>'Dashboard','menu'=>$postMenu,'aplikasi'=>$postAplikasi]);
     }
     
 }
