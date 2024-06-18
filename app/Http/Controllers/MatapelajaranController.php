@@ -10,7 +10,7 @@ use PharIo\Manifest\Url;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
 
-class SiswaController extends Controller
+class MatapelajaranController extends Controller
 {
     
     //
@@ -35,49 +35,46 @@ class SiswaController extends Controller
             ]
         ];
     }
-    public function kelolaSiswa(){
+    public function kelolaMatapelajaran(){
         $database = $this->_getDatabaseConnection();
         $config = config('grocerycrud');
 
         $crud = new GroceryCrud($config, $database);
         // $crud->setTheme('bootstrap-v4');
-        $crud->setTable('siswa');
-        $crud->setSubject('Siswa', 'Siswa');
-        $crud->columns(['nis','nama','kode_kelas','kode_jurusan','jkel','agama','alamat','tgl_lahir','tmpt_lahir','phone','siswa_email','siswa_password','verifikasi_kode']);
+        $crud->setTable('guru');
+        $crud->setSubject('Guru', 'Guru');
+        $crud->columns(['nip','nik','nuptk','nama','jkel','alamat','tmpt_lahir','tgl_lahir','guru_status','phone','agama','guru_password','guru_email','verifikasi_kode']);
         
-        $crud->addFields(['nis','nama','kode_kelas','kode_jurusan','jkel','agama','alamat','tgl_lahir','tmpt_lahir','phone','siswa_email','siswa_password']);
-        $crud->editFields(['nis','nama','kode_kelas','kode_jurusan','jkel','agama','alamat','tgl_lahir','tmpt_lahir','phone','siswa_email','siswa_password']);
-        $crud->requiredFields(['nis','nama','kode_kelas','kode_jurusan','jkel','agama','alamat','tgl_lahir','tmpt_lahir','phone','siswa_email','siswa_password']);
-        $crud->callbackBeforeUpdate(function ($stateParameters) {
-            $stateParameters->data['siswa_password'] = password_hash($stateParameters->data['siswa_password'], PASSWORD_DEFAULT);
-            return $stateParameters;
-        });
+        $crud->addFields(['nip','nik','nuptk','nama','jkel','alamat','tmpt_lahir','tgl_lahir','guru_status','phone','agama','guru_password','guru_email']);
+        $crud->editFields(['nip','nik','nuptk','nama','jkel','alamat','tmpt_lahir','tgl_lahir','guru_status','phone','agama','guru_password','guru_email']);
+        $crud->requiredFields(['nip','nik','nuptk','nama','jkel','alamat','tmpt_lahir','tgl_lahir','guru_status','phone','agama','guru_password','guru_email']);
         $crud->callbackBeforeInsert(function ($stateParameters) {
+            $stateParameters->data['guru_password'] = password_hash($stateParameters->data['guru_password'], PASSWORD_DEFAULT);
             $stateParameters->data['verifikasi_kode'] = rand(1000,9999);
-            $stateParameters->data['siswa_password'] = password_hash($stateParameters->data['siswa_password']."keluar", PASSWORD_DEFAULT);
             return $stateParameters;
         });
-        $crud->callbackAddField('kode_kelas',function ($stateParameters){
-            $data="<select class='form-control' id='kode_kelas' name='kode_kelas'><option value=''>-</option>";
-            $postKelas = DB::select('SELECT * FROM kelas');
-            foreach($postKelas as $row){
-                $data.="<option value='".$row->kode_kelas."'>".$row->nama_kelas."</option>";
-            }
-            $data.="</select>";
-            return $data;
-        });
-        $crud->callbackAddField('kode_jurusan',function ($stateParameters){
-            $data="<select class='form-control' id='kode_jurusan' name='kode_jurusan'><option value=''>-</option>";
-            $postKelas = DB::select('SELECT * FROM jurusan');
-            foreach($postKelas as $row){
-                $data.="<option value='".$row->kode_jurusan."'>".$row->nama_jurusan."</option>";
-            }
-            $data.="</select>";
-            return $data;
-        });
-        $crud->callbackEditField('nis',function ($value, $row){
-            return "<input type='text' id='nis' name='nis' class='form-control' value='".$value."' disabled>";
-        });
+        
+        // $crud->callbackAddField('kode_kelas',function ($stateParameters){
+        //     $data="<select class='form-control' id='kode_kelas' name='kode_kelas'><option value=''>-</option>";
+        //     $postKelas = DB::select('SELECT * FROM kelas');
+        //     foreach($postKelas as $row){
+        //         $data.="<option value='".$row->kode_kelas."'>".$row->nama_kelas."</option>";
+        //     }
+        //     $data.="</select>";
+        //     return $data;
+        // });
+        // $crud->callbackAddField('kode_jurusan',function ($stateParameters){
+        //     $data="<select class='form-control' id='kode_jurusan' name='kode_jurusan'><option value=''>-</option>";
+        //     $postKelas = DB::select('SELECT * FROM jurusan');
+        //     foreach($postKelas as $row){
+        //         $data.="<option value='".$row->kode_jurusan."'>".$row->nama_jurusan."</option>";
+        //     }
+        //     $data.="</select>";
+        //     return $data;
+        // });
+        // $crud->callbackEditField('nis',function ($value, $row){
+        //     return "<input type='text' id='nis' name='nis' class='form-control' value='".$value."' disabled>";
+        // });
         $crud->setConfig('actions_column_side', 'right');
         $crud->setConfig('paging_options', [10,50,100,200]);
         $crud->setConfig('default_per_page', 10);
@@ -126,7 +123,7 @@ class SiswaController extends Controller
             'css_files' => $css_files,
             'js_files' => $js_files,
             'tambahan' => "",
-            'judul' => "Manajemen Siswa",
+            'judul' => "Manajemen Guru",
             'menu' => $postMenu,
             'aplikasi' => $postAplikasi,
         ]);

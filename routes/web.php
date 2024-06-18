@@ -7,6 +7,10 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CrudController;
 use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\KelasController;
+use App\Http\Controllers\JurusanController;
+use App\Http\Controllers\GuruController;
+use App\Http\Controllers\MatapelajaranController;
 use GuzzleHttp\Middleware;
 
 //use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
@@ -52,3 +56,15 @@ Route::post('manajemenaplikasi/{operation?}/{id?}', [CrudController::class, 'man
 
 Route::get('siswa/{operation?}/{id?}', [SiswaController::class, 'kelolaSiswa'])->name('crudsiswa')->Middleware('auth');
 Route::post('siswa/{operation?}/{id?}', [SiswaController::class, 'kelolaSiswa'])->name('crudsiswa')->Middleware('auth');
+
+Route::get('kelas/{operation?}/{id?}', [KelasController::class, 'kelolaKelas'])->name('crudkelas')->Middleware('auth');
+Route::post('kelas/{operation?}/{id?}', [KelasController::class, 'kelolaKelas'])->name('crudkelas')->Middleware('auth');
+
+Route::get('jurusan/{operation?}/{id?}', [JurusanController::class, 'kelolaJurusan'])->name('crudjurusan')->Middleware('auth');
+Route::post('jurusan/{operation?}/{id?}', [JurusanController::class, 'kelolaJurusan'])->name('crudjurusan')->Middleware('auth');
+
+Route::get('guru/{operation?}/{id?}', [GuruController::class, 'kelolaGuru'])->name('crudguru')->Middleware('auth');
+Route::post('guru/{operation?}/{id?}', [GuruController::class, 'kelolaGuru'])->name('crudguru')->Middleware('auth');
+
+Route::get('matapelajaran/{operation?}/{id?}', [MatapelajaranController::class, 'kelolaMatapelajaran'])->name('crudguru')->Middleware('auth');
+Route::post('matapelajaran/{operation?}/{id?}', [MatapelajaranController::class, 'kelolaMatapelajaran'])->name('crudguru')->Middleware('auth');
