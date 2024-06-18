@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use GroceryCrud\Core\Validate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 
 class LoginController extends Controller
 {
@@ -24,6 +26,10 @@ class LoginController extends Controller
             'password' => $request->password,
         ];
         if(Auth::attempt($data)){
+            $post = DB::select('SELECT * FROM users where email=?',array($request->email));
+            foreach($post as $row){
+                Session::put('name',$row->name);
+            }
             return redirect()->route('dashboard');
         }else{
             return redirect()->route('login')->with('failed','Periksa email atau password Anda!');
