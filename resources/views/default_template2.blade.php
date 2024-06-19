@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Dashboard</title>
+    <title>Dashboard 2</title>
 
     <!-- Custom fonts for this template-->
     <link href="{{ url('dashboard1/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
